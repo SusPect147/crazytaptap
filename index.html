@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+      <title>MagicDuck</title>
+      <style>
+         @font-face {
+         font-family: 'HelveticaRegular';
+         src: url('Helvetica-Regular.ttf') format('truetype');
+         font-weight: normal;
+         font-style: normal;
+         }
+         body {
+         user-select: none;
+         background-image: linear-gradient(to bottom, #17252A, #3AAFA9);
+         margin: 0;
+         overflow: hidden;
+         height: 100vh;
+         display: flex;
+         flex-direction: column;
+         justify-content: space-between;
+         align-items: center;
+         font-family: 'HelveticaRegular', sans-serif;
+         
+         }
+         /* Стили для ПК (черный фон с текстом посередине) */
+    .desktop {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: black;
+      color: white;
+      text-align: center;
+    }
+
+    /* Скрыть основной контент по умолчанию */
+    .content {
+      display: none;
+    }
+
+    /* Стили для телефона */
+    .mobile .content {
+      display: block;
+    }
+
+    .mobile .desktop {
+      display: none;
+    }
+         .username {
+         position: fixed;
+         top: 3%;
+         left: 2%;
+         font-size: 30px;
+         font-weight: bold;
+         color: #2B7A78;
+         }
+         .duck-container {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         gap: 200px;
+         }
+         .menu {
+         position: fixed;
+         bottom: 0;
+         width: 100%;
+         height: 12%;
+         background: linear-gradient(rgb(229, 237, 238), rgb(187, 187, 187));
+         display: flex;
+         justify-content: space-around;
+         align-items: center;
+         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.479);
+         border-top-left-radius: 20px;
+         border-top-right-radius: 20px;
+         
+         }
+         .menu-item {
+         text-align: center;
+         color: #17252A;
+         font-size: 20px;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         }
+         .menu-item img {
+         width: 60px;
+         height: 60px;
+         margin-bottom: 4px;
+         }
+         .score {
+         position: fixed;
+         top: 2%;
+         left: 75%;
+         transform: translateX(-50%);
+         font-size: 40px;
+         color: #2B7A78;
+         font-weight: bold;
+         display: flex;
+         align-items: center;
+         gap: 10px;
+         }
+         .score img {
+         width: 70px;
+         height: 70px;
+         }
+         .duck {
+         cursor: pointer;
+         max-width: 60%;
+         max-height: 60%;
+         height: auto;
+         width: auto;
+         transition: transform 0.5s ease;
+         pointer-events: auto;
+         -webkit-tap-highlight-color: transparent;
+         }
+         /* Backdrop for menu */
+         .menu-backdrop {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(0, 0, 0, 0.4);
+         display: none;
+         justify-content: center;
+         align-items: flex-end;
+         }
+         .skins-menu {
+    position: relative;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(rgb(229, 237, 238), rgb(187, 187, 187));
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.5);
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+    overflow-y: auto; /* Содержимое меню прокручивается */
+}
+
+#close-menu {
+    position: fixed; /* Меняем на fixed для независимости от содержимого меню */
+    top: 30%; /* Расположен относительно окна */
+    right: 2%; /* Расположен относительно окна */
+    width: 37px;
+    height: 37px;
+    background-color: rgb(226, 226, 226); /* Черный фон */
+    color: rgb(32, 32, 32); /* Белый цвет крестика */
+    font-size: 30px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center; /* Центрирует крестик по горизонтали */
+    align-items: center; /* Центрирует крестик по вертикали */
+    cursor: pointer;
+    border-radius: 40%; /* Закругленный фон */
+    z-index: 1000; /* Убедитесь, что крестик всегда виден */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between; /* Распределяет элементы по краям */
+    align-items: center; /* Выравнивает элементы по вертикали */
+    justify-content: center; /* Центрирует крестик по горизонтали */
+}
+
+         .category {
+         font-size: 24px;
+         font-weight: bold;
+         margin-top: 10px;
+         }
+         .category1 {
+         font-size: 40px;
+         font-weight: bold;
+         margin-top: 10px;
+         }
+         .skins-carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    color: #17252A;
+    margin-bottom: 40px; /* Добавлен отступ между рядами */
+}
+.skin-item1.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item2.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item3.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item4.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item5.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item6.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item11.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item111.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item1111.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+.skin-item7.unlocked {
+    filter: none; /* Убираем фильтр для разблокированных скинов */
+}
+
+.skin-item1 {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    filter: brightness(60%);
+    background: linear-gradient(
+      217deg,
+      rgba(255, 255, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(149, 165, 3, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(255, 230, 0, 0.8), rgba(0, 0, 255, 0) 70.71%);
+}
+.skin-item11 {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    filter: brightness(60%);
+    background: linear-gradient(
+      217deg,
+      rgba(255, 255, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%);
+}
+.skin-item111 {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    filter: brightness(60%);
+    background: linear-gradient(
+      217deg,
+      rgba(255, 0, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(0, 238, 255, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(9, 255, 0, 0.8), rgba(0, 0, 255, 0) 70.71%);
+}
+/* Градиент, как на первой картинке */
+.skin-item1111 {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    filter: brightness(60%);
+    background: radial-gradient(circle at top left, #91b0d6, transparent 50%),
+                radial-gradient(circle at top right, #bfbae9, transparent 50%),
+                radial-gradient(circle at bottom right, #e4d9b3, transparent 50%),
+                radial-gradient(circle at bottom left, #a8d6d5, transparent 50%);
+}
+
+
+.skin-item7 {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    filter: brightness(60%);
+    background: linear-gradient(
+      217deg,
+      rgba(255, 255, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(255, 115, 0, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(255, 0, 0, 0.8), rgba(0, 0, 255, 0) 70.71%);
+}
+         .skin-item2 {
+         flex: 0 0 auto;
+         width: 150px;
+         height: 150px;
+         position: relative;
+         cursor: pointer;
+         border-radius: 10px;
+         overflow: hidden;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+         filter: brightness(60%);
+         background: linear-gradient(
+      217deg,
+      rgba(0, 255, 242, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(0, 132, 255, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(0, 38, 255, 0.8), rgba(0, 0, 255, 0) 70.71%);
+         }
+         .skin-item3 {
+         flex: 0 0 auto;
+         width: 150px;
+         height: 150px;
+         position: relative;
+         cursor: pointer;
+         border-radius: 10px;
+         overflow: hidden;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+         filter: brightness(60%);
+         background: linear-gradient(
+      217deg,
+      rgba(58, 58, 58, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(80, 80, 80, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(48, 48, 48, 0.8), rgba(0, 0, 255, 0) 70.71%);
+         }
+         .skin-item4 {
+         flex: 0 0 auto;
+         width: 150px;
+         height: 150px;
+         position: relative;
+         cursor: pointer;
+         border-radius: 10px;
+         overflow: hidden;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+         filter: brightness(60%);
+         background: linear-gradient(
+      217deg,
+      rgba(255, 255, 255, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(189, 189, 189, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(141, 141, 141, 0.8), rgba(0, 0, 255, 0) 70.71%);
+         }
+         .skin-item5 {
+         flex: 0 0 auto;
+         width: 150px;
+         height: 150px;
+         position: relative;
+         cursor: pointer;
+         border-radius: 10px;
+         overflow: hidden;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+         filter: brightness(60%);
+         background: linear-gradient(
+      217deg,
+      rgba(247, 0, 255, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(225, 0, 255, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(183, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%);
+         }
+         .skin-item6 {
+         flex: 0 0 auto;
+         width: 150px;
+         height: 150px;
+         position: relative;
+         cursor: pointer;
+         border-radius: 10px;
+         overflow: hidden;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+         filter: brightness(60%);
+         background: linear-gradient(
+      217deg,
+      rgba(115, 255, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(77, 228, 85, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(18, 129, 8, 0.8), rgba(0, 0, 255, 0) 70.71%);
+         }
+         .skin-item1 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item11 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item111 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item1111 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item2 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item3 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item4 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item5 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item6 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-item7 img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         }
+         .skin-price {
+         position: absolute;
+         bottom: 5px;
+         right: 5px;
+         background: rgba(0, 0, 0, 0.7);
+         color: #DEF2F1;
+         font-size: 14px;
+         padding: 2px 5px;
+         border-radius: 5px;
+         }
+         .skin-item.unlocked {
+         filter: none;
+         }
+         .chains {
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-image: url('chains.png');
+         background-size: cover;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 1;
+         }
+         .particle {
+         position: absolute;
+         width: 5px;
+         height: 5px;
+         background-color: #DEF2F1;
+         border-radius: 50%;
+         animation: particle-animation 0.5s ease-out forwards;
+         pointer-events: none;
+         }
+         @keyframes particle-animation {
+         0% {
+         transform: translate(0, 0) scale(1);
+         opacity: 1;
+         }
+         100% {
+         transform: translate(var(--particle-x), var(--particle-y)) scale(0.5);
+         opacity: 0;
+         }
+         }
+         @media (max-height: 740px) {
+   .menu-item img {
+      width: 40px;
+      height: 40px;
+   }
+   .menu-item {
+      font-size: 15px;
+   }
+   .username {
+         font-size: 20px;
+         }
+         #close-menu {
+    width: 30px;
+    height: 30px;
+    font-size: 22px;
+}
+.duck {
+         max-width: 50%;
+         max-height: 50%;
+         }
+         .score {
+         font-size: 30px;
+         }
+         .score img {
+         width: 50px;
+         height: 50px;
+         }
+}
+
+</style>
+   </head>
+   <body>
+
+      <div class="confetti" id="confetti"></div>
+      <div class="username" id="username">Hello, Guest</div>
+      <div class="score">
+         <img src="f4e97997cb38fc577a.png" alt="Coin Icon">
+         <span id="coin-count">0</span>
+      </div>
+      <div class="duck-container">
+         <img src="утка-махает.gif" alt="Waving Duck" class="duck" id="duck">
+      </div>
+      <div class="menu">
+         <div class="menu-item">
+            <img src="утка-курит.gif" alt="Games">
+            <span>Games</span>
+         </div>
+         <div class="menu-item" id="skins-button">
+            <img src="утка-миллиардер.gif" alt="Skins">
+            <span>Skins</span>
+         </div>
+         <div class="menu-item">
+            <img src="утка-махает.gif" alt="Home">
+            <span>Home</span>
+         </div>
+         <div class="menu-item">
+            <img src="утка-лайк.gif" alt="Upgrades">
+            <span>Upgrades</span>
+         </div>
+         <div class="menu-item">
+            <img src="утка-с-самолетиком.gif" alt="Leader Board">
+            <span>Leader <br> Board</span>
+         </div>
+      </div>
+      <div class="menu-backdrop" id="menu-backdrop">
+         <div class="skins-menu" id="skins-menu">
+             <div id="close-menu">&times;</div>
+             <div class="header">
+                 <div class="category1">Ducks skins!</div>
+             </div>
+             <div>
+                 <!-- Duck For Duck Section -->
+               <div>
+                  <div class="category">Release Ducks</div>
+                  <div class="skins-carousel" id="duck-for-duck">
+                     <div class="skin-item2">
+                        <img src="рели-утка-демон.gif" alt="Skin 0">
+                        <div class="skin-price">Release skin1</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-крутой-с-сердцем.gif" alt="Skin 1">
+                        <div class="skin-price">Release skin2</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-крутой.gif" alt="Skin 2">
+                        <div class="skin-price">Release skin3</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-неважно.gif" alt="Skin 3">
+                        <div class="skin-price">Release skin4</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-огонь.gif" alt="Skin 4">
+                        <div class="skin-price">Release skin5</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-плачеь.gif" alt="Skin 5">
+                        <div class="skin-price">Release skin6</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-самолетик.gif" alt="Skin 6">
+                        <div class="skin-price">Release skin7</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-смеется.gif" alt="Skin 7">
+                        <div class="skin-price">Release skin8</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-удивление.gif" alt="Skin 8">
+                        <div class="skin-price">Release skin9</div>
+                     </div>
+                     <div class="skin-item2">
+                        <img src="релиз-утка-ШОК.gif" alt="Skin 9">
+                        <div class="skin-price">Release skin10</div>
+                     </div>
+                  </div>
+                  <div class="category">Classic Ducks</div>
+                  <div class="skins-carousel" id="duck-for-duck">
+                     <div class="skin-item1"  data-cost="0">
+                        <img src="утка-махает.gif" alt="Skin 1">
+                        <div class="skin-price">0 ducks</div>
+                     </div>
+                     <div class="skin-item1"  data-cost="1000">
+                        <img src="утка-лайк.gif" alt="Skin 2">
+                        <div class="skin-price">1000 ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="10000">
+                        <img src="крутая-утка.gif" alt="Skin 3">
+                        <div class="skin-price">10K ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="25000">
+                        <img src="утка-агент.gif" alt="Skin 4">
+                        <div class="skin-price">25K ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="50000">
+                        <img src="утка-в-реке-слез.gif" alt="Skin 5">
+                        <div class="skin-price">50K ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="100000">
+                        <img src="утка-в-сердечках.gif" alt="Skin 6">
+                        <div class="skin-price">100K ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="200000">
+                        <img src="утка-взрывается.gif" alt="Skin 7">
+                        <div class="skin-price">200K ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="500000">
+                        <img src="утка-думает.gif" alt="Skin 8">
+                        <div class="skin-price">500K ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="750000">
+                        <img src="утка-купается.gif" alt="Skin 9">
+                        <div class="skin-price">750K ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="1000000">
+                        <img src="утка-курит.gif" alt="Skin 10">
+                        <div class="skin-price">1M ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="7500000">
+                        <img src="утка-праздник.gif" alt="Skin 11">
+                        <div class="skin-price">7.5M ducks</div>
+                     </div>
+                     <div class="skin-item1" data-cost="10000000">
+                        <img src="утка-смеется.gif" alt="Skin 12">
+                        <div class="skin-price">10M ducks</div>
+                     </div>
+                     
+                     
+                     <div class="skin-item11">
+                        <img src="утка-меняется.gif" alt="Star Skin 15">
+                        <div class="skin-price">20 TGstars</div>
+                     </div>
+                     <div class="skin-item11">
+                        <img src="утка-миллиардер.gif" alt="Star Skin 16">
+                        <div class="skin-price">30 TGstars</div>
+                     </div>
+                     <div class="skin-item11">
+                        <img src="утка-радуга.gif" alt="Star Skin 17">
+                        <div class="skin-price">100 TGstars</div>
+                     </div>
+                  </div>
+               </div>
+               <div class="category">Dark Ducks</div>
+               <div class="skins-carousel" id="duck-for-duck">
+                  <div class="skin-item3" data-cost="3000">
+                     <img src="черная-утка-не-знает.gif" alt="Skin 8">
+                     <div class="skin-price">3K ducks</div>
+                  </div>
+                  <div class="skin-item3" data-cost="5500">
+                     <img src="черная-утка-неважно.gif" alt="Skin 9">
+                     <div class="skin-price">5.5k ducks</div>
+                  </div>
+                  <div class="skin-item3"  data-cost="12300">
+                     <img src="черная-утка-взрывается.gif" alt="Skin 2">
+                     <div class="skin-price">12.3K ducks</div>
+                  </div>
+                  
+                  <div class="skin-item3" data-cost="25000">
+                     <img src="черная-утка-киллер.gif" alt="Skin 4">
+                     <div class="skin-price">25K ducks</div>
+                  </div>
+                  <div class="skin-item3" data-cost="50000">
+                     <img src="черная-утка-загрузка.gif" alt="Skin 3">
+                     <div class="skin-price">50K ducks</div>
+                  </div>
+                  <div class="skin-item3" data-cost="100000">
+                     <img src="черная-утка-крутая.gif" alt="Skin 6">
+                     <div class="skin-price">100K ducks</div>
+                  </div>
+                  <div class="skin-item3" data-cost="999000">
+                     <img src="черная-утка-плачет.gif" alt="Skin 11">
+                     <div class="skin-price">999k ducks</div>
+                  </div>
+                  <div class="skin-item3" data-cost="1000000">
+                     <img src="черная-утка-китти.gif" alt="Skin 5">
+                     <div class="skin-price">1M ducks</div>
+                  </div>
+                  <div class="skin-item3"  data-cost="5000000">
+                     <img src="черная-утка-богач.gif" alt="Skin 1">
+                     <div class="skin-price">5M ducks</div>
+                  </div>
+                  <div class="skin-item3" data-cost="10000000">
+                     <img src="черная-утка-пикачу.gif" alt="Skin 10">
+                     <div class="skin-price">10M ducks</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="черная-утка-радуга.gif" alt="Skin 12">
+                     <div class="skin-price">10 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="черная-утка-с-ножом.gif" alt="Star Skin 13">
+                     <div class="skin-price">10 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="черная-утка-самолетик.gif" alt="Star Skin 14">
+                     <div class="skin-price">15 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="черная-утка-курит.gif" alt="Skin 7">
+                     <div class="skin-price">15 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="огненная-утка.gif" alt="Star Skin 14">
+                     <div class="skin-price">15 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="черная-утка-сердечки.gif" alt="Star Skin 15">
+                     <div class="skin-price">20 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="черная-утка-спит.gif" alt="Star Skin 16">
+                     <div class="skin-price">30 TGstars</div>
+                  </div>
+                  <div class="skin-item111">
+                     <img src="черная-утка-кружок.gif" alt="Star Skin 17">
+                     <div class="skin-price">BOOST our channel!</div>
+                  </div>
+               </div>
+               <div class="category">Donald Duck</div>
+               <div class="skins-carousel" id="duck-for-duck">
+                  <div class="skin-item4" data-cost="7500">
+                     <img src="белая-утка-взрыв.gif" alt="Skin 12">
+                     <div class="skin-price">7.5K ducks</div>
+                  </div>
+                  <div class="skin-item4"  data-cost="10000">
+                     <img src="белая-утка-бо-синн.gif" alt="Skin 2">
+                     <div class="skin-price">10K ducks</div>
+                  </div>
+   
+                  <div class="skin-item4" data-cost="25000">
+                     <img src="белая-утка-загрузка.gif" alt="Skin 4">
+                     <div class="skin-price">25K ducks</div>
+                  </div>
+                  <div class="skin-item4" data-cost="50000">
+                     <img src="белая-утка-не-знает.gif" alt="Skin 5">
+                     <div class="skin-price">50K ducks</div>
+                  </div>
+                  <div class="skin-item4"  data-cost="100000">
+                     <img src="белая-утка-агент.gif" alt="Skin 1">
+                     <div class="skin-price">100K ducks</div>
+                  </div>
+                  <div class="skin-item4" data-cost="200000">
+                     <img src="белая-утка-плачет.gif" alt="Skin 7">
+                     <div class="skin-price">200K ducks</div>
+                  </div>
+                  
+                  <div class="skin-item4" data-cost="1000000">
+                     <img src="белая-утка-самолет.gif" alt="Skin 10">
+                     <div class="skin-price">1M ducks</div>
+                  </div>
+                  <div class="skin-item4" data-cost="7500000">
+                     <img src="белая-утка-сигма.gif" alt="Skin 11">
+                     <div class="skin-price">7.5M ducks</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="белая-утка-растет.gif" alt="Skin 9">
+                     <div class="skin-price">17 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="белая-утка-превращение.gif" alt="Skin 8">
+                     <div class="skin-price">22 TGstars</div>
+                  </div>
+
+                  <div class="skin-item11">
+                     <img src="белая-утка-пикачу.gif" alt="Skin 6">
+                     <div class="skin-price">25 TGstars</div>
+                  </div>
+
+                  <div class="skin-item11">
+                     <img src="белая-утка-богач.gif" alt="Skin 3">
+                     <div class="skin-price">100 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="утка-снеговик.gif" alt="Star Skin 18">
+                     <div class="skin-price">250 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="утка-скелет.gif" alt="Star Skin 19">
+                     <div class="skin-price">500 TGstars</div>
+                  </div>
+                  <div class="skin-item111">
+                     <img src="белая-утка-связь.gif" alt="Skin 13">
+                     <div class="skin-price">BOOST our channel!</div>
+                  </div>
+                  <div class="skin-item111">
+                     <img src="белая-утка-крутой-с-сердец.gif" alt="Skin 14">
+                     <div class="skin-price">BOOST our channel!</div>
+                  </div>
+               </div>
+               <div class="category">Purple Ducks</div>
+               <div class="skins-carousel" id="duck-for-duck">
+                  <div class="skin-item5"  data-cost="100">
+                     <img src="фиолетовая-утка-лайк.gif" alt="Skin 1">
+                     <div class="skin-price">100 ducks</div>
+                  </div>
+                  <div class="skin-item5" data-cost="750">
+                     <img src="фиолетовая-утка-плачет.gif" alt="Skin 3">
+                     <div class="skin-price">750 ducks</div>
+                  </div>
+                  <div class="skin-item5"  data-cost="10000">
+                     <img src="фиолетовая-утка-неважно.gif" alt="Skin 2">
+                     <div class="skin-price">10K ducks</div>
+                  </div>
+                  <div class="skin-item5" data-cost="50000">
+                     <img src="фиолетовая-утка-сердится.gif" alt="Skin 5">
+                     <div class="skin-price">50K ducks</div>
+                  </div>
+                  <div class="skin-item5" data-cost="50000">
+                     <img src="фиолетовая-утка-удивлена.gif" alt="Skin 6">
+                     <div class="skin-price">50K ducks</div>
+                  </div>
+                  
+                  <div class="skin-item5" data-cost="50000">
+                     <img src="фиолетовая-утка-шок.gif" alt="Skin 8">
+                     <div class="skin-price">50K ducks</div>
+                  </div>
+                  <div class="skin-item5" data-cost="25000000">
+                     <img src="фиолетовая-утка-радуга.gif" alt="Skin 4">
+                     <div class="skin-price">25M ducks</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="демон-утка.gif" alt="Star Skin 13">
+                     <div class="skin-price">10 TGstars</div>
+                  </div>
+                  <div class="skin-item111">
+                     <img src="фиолетовая-утка-целует.gif" alt="Skin 7">
+                     <div class="skin-price">BOOST our channel!</div>
+                  </div>
+               </div>
+               <div class="category">PEPE Ducks</div>
+               <div class="skins-carousel" id="duck-for-duck">
+                  <div class="skin-item6"  data-cost="100">
+                     <img src="пепе-утка-взрыв-мозга.gif" alt="Skin 1">
+                     <div class="skin-price">100 ducks</div>
+                  </div>
+                  <div class="skin-item6"  data-cost="500">
+                     <img src="пепе-утка-крутой.gif" alt="Skin 2">
+                     <div class="skin-price">500 ducks</div>
+                  </div>
+                  <div class="skin-item6" data-cost="2000">
+                     <img src="пепе-утка-не-знает.gif" alt="Skin 3">
+                     <div class="skin-price">2K ducks</div>
+                  </div>
+                  <div class="skin-item6" data-cost="10000">
+                     <img src="пепе-утка-неважно.gif" alt="Skin 4">
+                     <div class="skin-price">10K ducks</div>
+                  </div>
+               
+                  <div class="skin-item6" data-cost="66000">
+                     <img src="пепе-утка-плачет.gif" alt="Skin 6">
+                     <div class="skin-price">66K ducks</div>
+                  </div>
+                  <div class="skin-item6" data-cost="17000000">
+                     <img src="пепе-утка-огонь.gif" alt="Skin 5">
+                     <div class="skin-price">17M ducks</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="утка-пепе-самолетик.gif" alt="Skin 9">
+                     <div class="skin-price">25 TGstars</div>
+                  </div>
+                  <div class="skin-item11">
+                     <img src="утка-пепе-пепе.gif" alt="Skin 8">
+                     <div class="skin-price">50 TGstars</div>
+                  </div>
+                  <div class="skin-item111">
+                     <img src="пепе-утка-смеется.gif" alt="Skin 7">
+                     <div class="skin-price">BOOST our channel!</div>
+                  </div>
+               </div>
+               <div class="category">Quest Ducks</div>
+               <div class="skins-carousel" id="duck-for-duck">
+                  <div class="skin-item1111">
+                     <img src="квест-утка-1.gif" alt="Skin 1">
+                     <div class="skin-price">Quest 1</div>
+                  </div>
+                  <div class="skin-item1111">
+                     <img src="квест-утка-2.gif" alt="Skin 2">
+                     <div class="skin-price">Quest 2</div>
+                  </div>
+                  <div class="skin-item1111">
+                     <img src="квест-утка-3.gif" alt="Skin 3">
+                     <div class="skin-price">Quest 3</div>
+                  </div>
+                  <div class="skin-item1111">
+                     <img src="квест-утка-4.gif" alt="Skin 4">
+                     <div class="skin-price">Quest 4</div>
+                  </div>
+                  <div class="skin-item1111">
+                     <img src="квест-утка-5.gif" alt="Skin 5">
+                     <div class="skin-price">Quest 5</div>
+                  </div>
+                  <div class="skin-item1111">
+                     <img src="квест-утка-6.gif" alt="Skin 6">
+                     <div class="skin-price">Quest 6</div>
+                  </div>
+               </div>
+               <div class="category">BETA Ducks</div>
+               <div class="skins-carousel" id="duck-for-duck">
+                  <div class="skin-item7">
+                     <img src="звезды-утка-богач.gif" alt="Skin 1">
+                     <div class="skin-price">BETA skin1</div>
+                  </div>
+                  <div class="skin-item7">
+                     <img src="звезды-утка-вечеринка.gif" alt="Skin 2">
+                     <div class="skin-price">BETA skin2</div>
+                  </div>
+                  <div class="skin-item7">
+                     <img src="звезды-утка-подарочки.gif" alt="Skin 3">
+                     <div class="skin-price">BETA skin3</div>
+                  </div>
+                  <div class="skin-item7">
+                     <img src="звезды-утка-супермен.gif" alt="Skin 4">
+                     <div class="skin-price">BETA skin4</div>
+                  </div>
+                  <div class="skin-item7">
+                     <img src="звезды-утка-съедает-сообщение.gif" alt="Skin 5">
+                     <div class="skin-price">BETA skin5</div>
+                  </div>
+                  <div class="skin-item7">
+                     <img src="звезды-утка-телефон.gif" alt="Skin 6">
+                     <div class="skin-price">BETA skin6</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      </div>
+      <script>
+         if (window.Telegram && Telegram.WebApp) {
+                     const tg = window.Telegram.WebApp;
+                     tg.expand();
+                     const user = tg.initDataUnsafe?.user || {};
+                     let username = user.username || user.first_name || "Guest";
+                     if (username.length > 6) {
+                         username = username.slice(0, 6) + "...";
+                     }
+                     document.getElementById("username").textContent = Hello, `${username}`;
+                 }
+                 let coins = 0;
+                 const coinCountElement = document.getElementById('coin-count');
+                 const duck = document.getElementById('duck');
+                 const cooldownTimerElement = document.getElementById('cooldown-timer');
+                 const initialScale = 1;
+                 const maxScale = 1.3;
+                 let currentScale = initialScale;
+                 let shrinkTimeout;
+                 let isCooldown = false;
+                 duck.addEventListener('click', () => {
+                     const earnedCoins = Math.floor(Math.random() * 3) + 1;
+                     coins += earnedCoins;
+                     coinCountElement.textContent = coins;
+                     currentScale = Math.min(maxScale, currentScale + 0.1);
+                     duck.style.transform = `scale(${currentScale})`;
+                     clearTimeout(shrinkTimeout);
+                     shrinkTimeout = setTimeout(() => {
+                         shrinkDuck();
+                     }, 100);
+                     let cooldownTime = 100;
+                     const cooldownInterval = setInterval(() => {
+                         cooldownTime -= 100;
+         
+                         if (cooldownTime <= 0) {
+                             clearInterval(cooldownInterval);
+                             isCooldown = false;
+                         }
+                     }, 100);
+                 });
+                 function shrinkDuck() {
+                     if (currentScale > initialScale) {
+                         currentScale = Math.max(initialScale, currentScale - 0.05);
+                         duck.style.transform = `scale(${currentScale})`;
+                         shrinkTimeout = setTimeout(() => {
+                             shrinkDuck();
+                         }, 50);
+                     }
+                 }
+         function buySkin(skinElement) {
+            const cost = parseInt(skinElement.getAttribute('data-cost'));
+            const type = skinElement.getAttribute('data-type') || 'coins';
+            if (type === 'coins' && coins >= cost) {
+               coins -= cost;
+               coinCountElement.textContent = coins;
+               unlockSkin(skinElement);
+            } else if (type === 'stars' && stars >= cost) {
+               stars -= cost;
+               unlockSkin(skinElement);
+            } else {
+               showPurchaseStatus('Not enough coins or stars!');
+            }
+            updateCurrencyDisplay();
+         }
+         function unlockSkin(skinElement) {
+    skinElement.classList.add('unlocked'); // Добавляем класс для разблокированного скина
+    skinElement.querySelector('.skin-price').textContent = 'Unlocked';
+    skinElement.removeEventListener('click', skinClickHandler);
+    skinElement.addEventListener('click', () => {
+        selectSkin(skinElement);
+    });
+}
+
+         function selectSkin(skinElement) {
+            const skinImageSrc = skinElement.querySelector('img').getAttribute('src');
+            const duckElement = document.getElementById('duck');
+            duckElement.setAttribute('src', skinImageSrc);
+         }
+         function showPurchaseStatus(message) {
+            skinPurchaseStatus.textContent = message;
+            skinPurchaseStatus.style.display = 'block';
+            setTimeout(() => {
+               skinPurchaseStatus.style.display = 'none';
+            }, 2000);
+         }
+         function skinClickHandler(event) {
+            const skinElement = event.currentTarget;
+            if (!skinElement.classList.contains('unlocked')) {
+               buySkin(skinElement);
+            }
+         }
+         document.querySelectorAll('.skin-item1').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item2').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item3').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item4').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item5').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item6').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item11').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item111').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item1111').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item7').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         const skinsButton = document.getElementById('skins-button');
+         const skinsMenu = document.getElementById('skins-menu');
+         const menuBackdrop = document.getElementById('menu-backdrop');
+         const closeMenu = document.getElementById('close-menu');
+         skinsButton.addEventListener('click', () => {
+            menuBackdrop.style.display = 'flex';
+            skinsMenu.style.display = 'flex';
+         });
+         closeMenu.addEventListener('click', () => {
+            closeSkinsMenu();
+         });
+         menuBackdrop.addEventListener('click', (e) => {
+            if (e.target === menuBackdrop) {
+               
+            }
+         });
+         function closeSkinsMenu() {
+            menuBackdrop.style.display = 'none';
+            skinsMenu.style.display = 'none';
+         }
+      </script>
+   </body>
+</html>
