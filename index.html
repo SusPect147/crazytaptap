@@ -527,7 +527,7 @@
    <body>
 
       <div class="confetti" id="confetti"></div>
-      <div class="username" id="username">Hello, Guest</div>
+      <div class="username" id="username">Error 1</div>
       <div class="score">
          <img src="f4e97997cb38fc577a.png" alt="Coin Icon">
          <span id="coin-count">0</span>
@@ -961,17 +961,7 @@
       </div>
       </div>
       <script>
-         // Получение имени или ника
-const user = tg.initDataUnsafe?.user || {};
-const username = user.username || `${user.first_name || ''} ${user.last_name || ''}`.trim();
-
-// Отображение имени
-const usernameElement = document.getElementById('username');
-if (username) {
-  usernameElement.textContent = `Hello, ${username}!`;
-} else {
-  usernameElement.textContent = 'Error 1';
-}
+ 
                  let coins = 0;
                  const coinCountElement = document.getElementById('coin-count');
                  const duck = document.getElementById('duck');
@@ -1102,6 +1092,17 @@ if (username) {
             menuBackdrop.style.display = 'none';
             skinsMenu.style.display = 'none';
          }
+           // Получение имени или ника
+  const user = tg.initDataUnsafe?.user || {};
+  const username = user.username || `${user.first_name || ''} ${user.last_name || ''}`.trim();
+
+  // Отображение имени
+  const usernameElement = document.getElementById('username');
+  if (username) {
+    usernameElement.textContent = `Hello, ${username}!`;
+  } else {
+    usernameElement.textContent = 'Error 1';
+  }
           // Инициализация Telegram Web App
     const tg = window.Telegram.WebApp;
 
