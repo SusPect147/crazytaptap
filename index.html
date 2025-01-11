@@ -1115,22 +1115,37 @@ let coins = 0;
          }
      
 
-         const user = tg.initDataUnsafe?.user || {};
-         const username = user.username || `${user.first_name || ''} ${user.last_name || ''}`.trim();
-     
-         // Отображение имени
-         const usernameElement = document.getElementById('username');
-         if (username) {
-             usernameElement.textContent = `Hello, ${username}!`;
-         } else {
-             usernameElement.textContent = 'Error 1';
-         }
-     // Отображение фото
+// Проверка наличия данных Telegram Web App SDK
+const user = tg?.initDataUnsafe?.user || {};
+
+// Получаем имя пользователя
+const username = user.username || `${user.first_name || ''} ${user.last_name || ''}`.trim();
+
+// Получаем URL фото профиля, если доступно
+const userPhotoUrl = user.photo_url || null;
+
+// Найти элементы на странице
+const usernameElement = document.getElementById('username');
 const userIconElement = document.getElementById('user-icon');
-if (userPhotoUrl) {
-    userIconElement.style.backgroundImage = `url(${userPhotoUrl})`;
+
+// Установка имени пользователя
+if (username && usernameElement) {
+    usernameElement.textContent = `Hello, ${username}!`;
+} else if (usernameElement) {
+    usernameElement.textContent = 'Error: Unable to fetch username';
+}
+
+// Установка фото профиля
+if (userIconElement) {
+    if (userPhotoUrl) {
+        // Устанавливаем фото пользователя
+        userIconElement.style.backgroundImage = `url("${userPhotoUrl}")`;
+    } else {
+        // Устанавливаем стандартное изображение, если фото отсутствует
+        userIconElement.style.backgroundImage = "url('default-avatar.png')";
+    }
 } else {
-    userIconElement.style.backgroundImage = "url('default-avatar.png')"; // Задайте путь к стандартному аватару
+    console.error('Error: Element with ID "user-icon" not found.');
 }
      </script>
    </body>
