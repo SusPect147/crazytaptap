@@ -961,21 +961,17 @@
       </div>
       </div>
       <script>
-                  // Инициализация Telegram Web App
-    const tg = window.Telegram.WebApp;
+         // Получение имени или ника
+const user = tg.initDataUnsafe?.user || {};
+const username = user.username || `${user.first_name || ''} ${user.last_name || ''}`.trim();
 
-// Применяем режим полного экрана для мини-приложения
-    window.Telegram.WebApp.expand();
-    window.Telegram.WebApp.requestFullscreen();
-
-// Настройка темы
-tg.expand(); // Открыть приложение на весь экран
-                     const user = tg.initDataUnsafe?.user || {};
-                     let username = user.username || user.first_name || "Guest";
-                     if (username.length > 6) {
-                         username = username.slice(0, 6) + "...";
-                     }
-                     document.getElementById("username").textContent = Hello, `${username}`;
+// Отображение имени
+const usernameElement = document.getElementById('username');
+if (username) {
+  usernameElement.textContent = `Hello, ${username}!`;
+} else {
+  usernameElement.textContent = 'Error 1';
+}
                  let coins = 0;
                  const coinCountElement = document.getElementById('coin-count');
                  const duck = document.getElementById('duck');
@@ -1106,6 +1102,15 @@ tg.expand(); // Открыть приложение на весь экран
             menuBackdrop.style.display = 'none';
             skinsMenu.style.display = 'none';
          }
+          // Инициализация Telegram Web App
+    const tg = window.Telegram.WebApp;
+
+    // Применяем режим полного экрана для мини-приложения
+        window.Telegram.WebApp.expand();
+        window.Telegram.WebApp.requestFullscreen();
+    
+    // Настройка темы
+    tg.expand(); // Открыть приложение на весь экран
       </script>
    </body>
 </html>
