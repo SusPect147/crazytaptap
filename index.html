@@ -962,163 +962,156 @@
          </div>
       </div>
       </div>
-<script>
-    let coins = 0;
-    const coinCountElement = document.getElementById('coin-count');
-    const duck = document.getElementById('duck');
-    const cooldownTimerElement = document.getElementById('cooldown-timer');
-    const initialScale = 1;
-    const maxScale = 1.3;
-    let currentScale = initialScale;
-    let shrinkTimeout;
-    let isCooldown = false;
-
-    duck.addEventListener('click', () => {
-        const earnedCoins = Math.floor(Math.random() * 3) + 1;
-        coins += earnedCoins;
-        coinCountElement.textContent = coins;
-        currentScale = Math.min(maxScale, currentScale + 0.1);
-        duck.style.transform = `scale(${currentScale})`;
-        clearTimeout(shrinkTimeout);
-        shrinkTimeout = setTimeout(() => {
-            shrinkDuck();
-        }, 100);
-        let cooldownTime = 100;
-        const cooldownInterval = setInterval(() => {
-            cooldownTime -= 100;
-
-            if (cooldownTime <= 0) {
-                clearInterval(cooldownInterval);
-                isCooldown = false;
+      <script>
+         tg.expand(); // Перенос этого вызова в начало кода
+let coins = 0;
+                 const coinCountElement = document.getElementById('coin-count');
+                 const duck = document.getElementById('duck');
+                 const cooldownTimerElement = document.getElementById('cooldown-timer');
+                 const initialScale = 1;
+                 const maxScale = 1.3;
+                 let currentScale = initialScale;
+                 let shrinkTimeout;
+                 let isCooldown = false;
+                 duck.addEventListener('click', () => {
+                     const earnedCoins = Math.floor(Math.random() * 3) + 1;
+                     coins += earnedCoins;
+                     coinCountElement.textContent = coins;
+                     currentScale = Math.min(maxScale, currentScale + 0.1);
+                     duck.style.transform = scale(`${currentScale}`);
+                     clearTimeout(shrinkTimeout);
+                     shrinkTimeout = setTimeout(() => {
+                         shrinkDuck();
+                     }, 100);
+                     let cooldownTime = 100;
+                     const cooldownInterval = setInterval(() => {
+                         cooldownTime -= 100;
+         
+                         if (cooldownTime <= 0) {
+                             clearInterval(cooldownInterval);
+                             isCooldown = false;
+                         }
+                     }, 100);
+                 });
+                 function shrinkDuck() {
+                     if (currentScale > initialScale) {
+                         currentScale = Math.max(initialScale, currentScale - 0.05);
+                         duck.style.transform = scale(`${currentScale}`);
+                         shrinkTimeout = setTimeout(() => {
+                             shrinkDuck();
+                         }, 50);
+                     }
+                 }
+         function buySkin(skinElement) {
+            const cost = parseInt(skinElement.getAttribute('data-cost'));
+            const type = skinElement.getAttribute('data-type') || 'coins';
+            if (type === 'coins' && coins >= cost) {
+               coins -= cost;
+               coinCountElement.textContent = coins;
+               unlockSkin(skinElement);
+            } else if (type === 'stars' && stars >= cost) {
+               stars -= cost;
+               unlockSkin(skinElement);
+            } else {
+               showPurchaseStatus('Not enough coins or stars!');
             }
-        }, 100);
+            updateCurrencyDisplay();
+         }
+         function unlockSkin(skinElement) {
+    skinElement.classList.add('unlocked'); // Добавляем класс для разблокированного скина
+    skinElement.querySelector('.skin-price').textContent = 'Unlocked';
+    skinElement.removeEventListener('click', skinClickHandler);
+    skinElement.addEventListener('click', () => {
+        selectSkin(skinElement);
     });
+}
 
-    function shrinkDuck() {
-        if (currentScale > initialScale) {
-            currentScale = Math.max(initialScale, currentScale - 0.05);
-            duck.style.transform = `scale(${currentScale})`;
-            shrinkTimeout = setTimeout(() => {
-                shrinkDuck();
-            }, 50);
-        }
-    }
-
-    function buySkin(skinElement) {
-        const cost = parseInt(skinElement.getAttribute('data-cost'));
-        const type = skinElement.getAttribute('data-type') || 'coins';
-        if (type === 'coins' && coins >= cost) {
-            coins -= cost;
-            coinCountElement.textContent = coins;
-            unlockSkin(skinElement);
-        } else if (type === 'stars' && stars >= cost) {
-            stars -= cost;
-            unlockSkin(skinElement);
-        } else {
-            showPurchaseStatus('Not enough coins or stars!');
-        }
-        updateCurrencyDisplay();
-    }
-
-    function unlockSkin(skinElement) {
-        skinElement.classList.add('unlocked'); // Добавляем класс для разблокированного скина
-        skinElement.querySelector('.skin-price').textContent = 'Unlocked';
-        skinElement.removeEventListener('click', skinClickHandler);
-        skinElement.addEventListener('click', () => {
-            selectSkin(skinElement);
-        });
-    }
-
-    function selectSkin(skinElement) {
-        const skinImageSrc = skinElement.querySelector('img').getAttribute('src');
-        const duckElement = document.getElementById('duck');
-        duckElement.setAttribute('src', skinImageSrc);
-    }
-
-    function showPurchaseStatus(message) {
-        skinPurchaseStatus.textContent = message;
-        skinPurchaseStatus.style.display = 'block';
-        setTimeout(() => {
-            skinPurchaseStatus.style.display = 'none';
-        }, 2000);
-    }
-
-    function skinClickHandler(event) {
-        const skinElement = event.currentTarget;
-        if (!skinElement.classList.contains('unlocked')) {
-            buySkin(skinElement);
-        }
-    }
-
-    document.querySelectorAll('.skin-item1').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item2').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item3').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item4').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item5').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item6').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item11').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item111').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item1111').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-    document.querySelectorAll('.skin-item7').forEach((skinElement) => {
-        skinElement.addEventListener('click', skinClickHandler);
-    });
-
-    const skinsButton = document.getElementById('skins-button');
-    const skinsMenu = document.getElementById('skins-menu');
-    const menuBackdrop = document.getElementById('menu-backdrop');
-    const closeMenu = document.getElementById('close-menu');
-    skinsButton.addEventListener('click', () => {
-        menuBackdrop.style.display = 'flex';
-        skinsMenu.style.display = 'flex';
-    });
-    closeMenu.addEventListener('click', () => {
-        closeSkinsMenu();
-    });
-    menuBackdrop.addEventListener('click', (e) => {
-        if (e.target === menuBackdrop) {
+         function selectSkin(skinElement) {
+            const skinImageSrc = skinElement.querySelector('img').getAttribute('src');
+            const duckElement = document.getElementById('duck');
+            duckElement.setAttribute('src', skinImageSrc);
+         }
+         function showPurchaseStatus(message) {
+            skinPurchaseStatus.textContent = message;
+            skinPurchaseStatus.style.display = 'block';
+            setTimeout(() => {
+               skinPurchaseStatus.style.display = 'none';
+            }, 2000);
+         }
+         function skinClickHandler(event) {
+            const skinElement = event.currentTarget;
+            if (!skinElement.classList.contains('unlocked')) {
+               buySkin(skinElement);
+            }
+         }
+         document.querySelectorAll('.skin-item1').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item2').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item3').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item4').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item5').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item6').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item11').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item111').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item1111').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         document.querySelectorAll('.skin-item7').forEach((skinElement) => {
+            skinElement.addEventListener('click', skinClickHandler);
+         });
+         const skinsButton = document.getElementById('skins-button');
+         const skinsMenu = document.getElementById('skins-menu');
+         const menuBackdrop = document.getElementById('menu-backdrop');
+         const closeMenu = document.getElementById('close-menu');
+         skinsButton.addEventListener('click', () => {
+            menuBackdrop.style.display = 'flex';
+            skinsMenu.style.display = 'flex';
+         });
+         closeMenu.addEventListener('click', () => {
             closeSkinsMenu();
-        }
-    });
+         });
+         menuBackdrop.addEventListener('click', (e) => {
+            if (e.target === menuBackdrop) {
+               
+            }
+         });
+         function closeSkinsMenu() {
+            menuBackdrop.style.display = 'none';
+            skinsMenu.style.display = 'none';
+         }
+     
+         // Получение имени или ника
+         const tg = window.Telegram.WebApp;
+         const user = tg.initDataUnsafe?.user || {};
+         const username = user.username || `${user.first_name || ''} ${user.last_name || ''}`.trim();
+     
+         // Отображение имени
+         const usernameElement = document.getElementById('username');
+         if (username) {
+             usernameElement.textContent = `Hello, ${username}!`;
+         } else {
+             usernameElement.textContent = 'Error 1';
+         }
+     
+         // Инициализация Telegram Web App
 
-    function closeSkinsMenu() {
-        menuBackdrop.style.display = 'none';
-        skinsMenu.style.display = 'none';
-    }
 
-    // Получение имени или ника
-    const tg = window.Telegram.WebApp;
-    const user = tg.initDataUnsafe?.user || {};
-    const username = user.username || `${user.first_name || ''} ${user.last_name || ''}`.trim();
-
-    // Отображение имени
-    const usernameElement = document.getElementById('username');
-    if (username) {
-        usernameElement.textContent = `Hello, ${username}!`;
-    } else {
-        usernameElement.textContent = 'Error 1';
-    }
-
-    // Инициализация Telegram Web App
-    tg.expand(); // Убедитесь, что это вызывается только в нужный момент (не сразу)
-
-</script>
+     
+     </script>
    </body>
 </html>
