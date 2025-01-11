@@ -523,8 +523,18 @@
          height: 50px;
          }
 }
-
+.icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 2px solid #000000; /* Обводка вокруг аватарки */
+            background: #ccc no-repeat center center;
+            background-size: cover;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Тень для эстетики */
+        }
 </style>
+
    </head>
    <body>
 
@@ -534,6 +544,7 @@
          <img src="f4e97997cb38fc577a.png" alt="Coin Icon">
          <span id="coin-count">0</span>
       </div>
+      <div class="icon"></div>
       <div class="duck-container">
          <img src="утка-махает.gif" alt="Waving Duck" class="duck" id="duck">
       </div>
@@ -1114,7 +1125,13 @@ let coins = 0;
          } else {
              usernameElement.textContent = 'Error 1';
          }
-     
+     // Отображение фото
+const userIconElement = document.getElementById('user-icon');
+if (userPhotoUrl) {
+    userIconElement.style.backgroundImage = `url(${userPhotoUrl})`;
+} else {
+    userIconElement.style.backgroundImage = "url('default-avatar.png')"; // Задайте путь к стандартному аватару
+}
      </script>
    </body>
 </html>
