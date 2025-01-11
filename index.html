@@ -986,7 +986,7 @@ let coins = 0;
                      coins += earnedCoins;
                      coinCountElement.textContent = coins;
                      currentScale = Math.min(maxScale, currentScale + 0.1);
-                     duck.style.transform = scale(`${currentScale}`);
+                     duck.style.transform = `scale(${currentScale})`;
                      clearTimeout(shrinkTimeout);
                      shrinkTimeout = setTimeout(() => {
                          shrinkDuck();
@@ -1004,7 +1004,7 @@ let coins = 0;
                  function shrinkDuck() {
                      if (currentScale > initialScale) {
                          currentScale = Math.max(initialScale, currentScale - 0.05);
-                         duck.style.transform = scale(`${currentScale}`);
+                         duck.style.transform = `scale(${currentScale})`;
                          shrinkTimeout = setTimeout(() => {
                              shrinkDuck();
                          }, 50);
@@ -1103,8 +1103,7 @@ let coins = 0;
             skinsMenu.style.display = 'none';
          }
      
-         // Получение имени или ника
-         const tg = window.Telegram.WebApp;
+
          const user = tg.initDataUnsafe?.user || {};
          const username = user.username || `${user.first_name || ''} ${user.last_name || ''}`.trim();
      
