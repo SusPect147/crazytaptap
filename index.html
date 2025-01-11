@@ -961,9 +961,18 @@
       </div>
       </div>
       <script>
+         // Инициализация Telegram Web App
+    const tg = window.Telegram.WebApp;
+
+    // Применяем режим полного экрана для мини-приложения
+        window.Telegram.WebApp.expand();
+        window.Telegram.WebApp.requestFullscreen();
+    
+    // Настройка темы
+    tg.expand(); // Открыть приложение на весь экран
          if (window.Telegram && Telegram.WebApp) {
                      const tg = window.Telegram.WebApp;
-                     tg.expand();
+
                      const user = tg.initDataUnsafe?.user || {};
                      let username = user.username || user.first_name || "Guest";
                      if (username.length > 6) {
