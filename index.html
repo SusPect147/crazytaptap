@@ -961,25 +961,21 @@
       </div>
       </div>
       <script>
-         // Инициализация Telegram Web App
+                  // Инициализация Telegram Web App
     const tg = window.Telegram.WebApp;
 
-    // Применяем режим полного экрана для мини-приложения
-        window.Telegram.WebApp.expand();
-        window.Telegram.WebApp.requestFullscreen();
-    
-    // Настройка темы
-    tg.expand(); // Открыть приложение на весь экран
-         if (window.Telegram && Telegram.WebApp) {
-                     const tg = window.Telegram.WebApp;
+// Применяем режим полного экрана для мини-приложения
+    window.Telegram.WebApp.expand();
+    window.Telegram.WebApp.requestFullscreen();
 
+// Настройка темы
+tg.expand(); // Открыть приложение на весь экран
                      const user = tg.initDataUnsafe?.user || {};
                      let username = user.username || user.first_name || "Guest";
                      if (username.length > 6) {
                          username = username.slice(0, 6) + "...";
                      }
                      document.getElementById("username").textContent = Hello, `${username}`;
-                 }
                  let coins = 0;
                  const coinCountElement = document.getElementById('coin-count');
                  const duck = document.getElementById('duck');
