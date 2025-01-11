@@ -963,6 +963,15 @@
       </div>
       </div>
       <script>
+         // Инициализация Telegram Web App
+    const tg = window.Telegram.WebApp;
+
+    // Применяем режим полного экрана для мини-приложения
+    window.Telegram.WebApp.expand();
+    window.Telegram.WebApp.requestFullscreen();
+
+    // Убедитесь, что Web App готов
+    tg.ready();
 let coins = 0;
                  const coinCountElement = document.getElementById('coin-count');
                  const duck = document.getElementById('duck');
@@ -1107,10 +1116,6 @@ let coins = 0;
              usernameElement.textContent = 'Error 1';
          }
      
-         // Инициализация Telegram Web App
-
-
-              tg.expand(); // Перенос этого вызова в начало кода
      </script>
    </body>
 </html>
